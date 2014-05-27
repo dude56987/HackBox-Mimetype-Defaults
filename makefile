@@ -1,17 +1,9 @@
 show:
 	echo 'Run "make install" as root to install program!'
-install:
-	# setup mime types for system
-	cp fehOpen.desktop ~/.local/share/applications/ -v
-	cp ffplayOpen.desktop ~/.local/share/applications/ -v
-	cp mimeapps.list ~/.local/share/applications/ -v
-	# setup the support program fehOpen
-	pycompile ./supportPrograms/fehOpen.py
-	cp ./supportPrograms/fehOpen.pyc ./supportPrograms/fehOpen
-	sudo chmod +x ./supportPrograms/fehOpen
-	sudo cp ./supportPrograms/fehOpen /usr/bin/fehOpen
-	rm ./supportPrograms/fehOpen
-	rm ./supportPrograms/fehOpen.pyc
+install: build
+	sudo gdebi --non-interactive hackbox-mimetype-defaults_UNSTABLE.deb
+uninstall:
+	sudo apt-get purge hackbox-mimetype-defaults
 build: 
 	sudo make build-deb;
 build-deb:
@@ -29,9 +21,6 @@ build-deb:
 	mkdir -p debian/opt;
 	mkdir -p debian/opt/hackbox;
 	mkdir -p debian/opt/hackbox/media;
-	# make post and pre install scripts have the correct permissions
-	chmod 775 debdata/postinst
-	chmod 775 debdata/postrm
 	# copy over configs to be installed
 	cp launcherFiles/fehOpen.desktop ./debian/usr/share/applications/ -v
 	cp launcherFiles/ffplayOpen.desktop ./debian/usr/share/applications/ -v
@@ -41,18 +30,23 @@ build-deb:
 	# copy over launchers and make them executable
 	cp supportPrograms/fehOpen.py ./debian/usr/bin/fehOpen
 	chmod +x ./debian/usr/bin/fehOpen
-	# make post and pre install scripts have the correct permissions
-	chmod 775 debdata/*
-	# start the md5sums file
+	# Create the md5sums file
 	find ./debian/ -type f -print0 | xargs -0 md5sum > ./debian/DEBIAN/md5sums
-	# remove unneeded md5 sums
+	# cut filenames of extra junk
 	sed -i.bak 's/\.\/debian\///g' ./debian/DEBIAN/md5sums
 	sed -i.bak 's/\\n*DEBIAN*\\n//g' ./debian/DEBIAN/md5sums
 	sed -i.bak 's/\\n*DEBIAN*//g' ./debian/DEBIAN/md5sums
-	# cleanup and build then cleanup some more
 	rm -v ./debian/DEBIAN/md5sums.bak
+	# figure out the package size	
+	du -sx --exclude DEBIAN ./debian/ > Installed-Size.txt
+	# copy over package data
 	cp -rv debdata/. debian/DEBIAN/
-	du -sx --exclude DEBIAN ./debian/ | sed "s/[abcdefghijklmnopqrstuvwxyz\ /.]//g" > packageSize.txt
+	# fix permissions in package
+	chmod -Rv 775 debian/DEBIAN/
+	chmod -Rv ugo+r debian/
+	chmod -Rv go-w debian/
+	chmod -Rv u+w debian/
+	# build the package
 	dpkg-deb --build debian
 	cp -v debian.deb hackbox-mimetype-defaults_UNSTABLE.deb
 	rm -v debian.deb
