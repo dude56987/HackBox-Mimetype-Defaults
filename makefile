@@ -21,22 +21,21 @@ build-deb:
 	mkdir -p debian/opt;
 	mkdir -p debian/opt/hackbox;
 	mkdir -p debian/opt/hackbox/media;
+	# copy over the assocation wizard
+	cp assocwizard.sh ./debian/usr/bin/assocwizard -v
+	# make it executable
+	chmod +x ./debian/usr/bin/assocwizard 
 	# copy over configs to be installed
-	cp launcherFiles/fehOpen.desktop ./debian/usr/share/applications/ -v
-	cp launcherFiles/ffplayOpen.desktop ./debian/usr/share/applications/ -v
+	cp launcherFiles/avplayOpen.desktop ./debian/usr/share/applications/ -v
 	cp mimeapps.list ./debian/etc/skel/.local/share/applications/ -v
 	#cp defaults.list ./debian/usr/share/applications/ -v
 	cp defaults.list ./debian/opt/hackbox/media/defaults.list -v
-	# copy over launchers and make them executable
-	cp supportPrograms/fehOpen.py ./debian/usr/bin/fehOpen
-	chmod +x ./debian/usr/bin/fehOpen
 	# Create the md5sums file
 	find ./debian/ -type f -print0 | xargs -0 md5sum > ./debian/DEBIAN/md5sums
 	# cut filenames of extra junk
-	sed -i.bak 's/\.\/debian\///g' ./debian/DEBIAN/md5sums
-	sed -i.bak 's/\\n*DEBIAN*\\n//g' ./debian/DEBIAN/md5sums
-	sed -i.bak 's/\\n*DEBIAN*//g' ./debian/DEBIAN/md5sums
-	rm -v ./debian/DEBIAN/md5sums.bak
+	sed -i 's/\.\/debian\///g' ./debian/DEBIAN/md5sums
+	sed -i 's/\\n*DEBIAN*\\n//g' ./debian/DEBIAN/md5sums
+	sed -i 's/\\n*DEBIAN*//g' ./debian/DEBIAN/md5sums
 	# figure out the package size	
 	du -sx --exclude DEBIAN ./debian/ > Installed-Size.txt
 	# copy over package data

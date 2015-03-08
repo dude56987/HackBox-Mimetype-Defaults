@@ -1,11 +1,11 @@
 Package: hackbox-mimetype-defaults
-Version: 0.1
+Version: 0.2
 Section: admin
 Maintainer: Carl Smith <feedback@hacker-haven.com>
 Installed-Size: 92
 Homepage: hacker-haven.com
 Priority: optional
 Architecture: all
-Depends: python (>=2.7)
+Depends: 
 Description: Sets the mimetype defaults to work with software installed though HackBoxSetup program.
  Sets the default mimetypes for new users. Modifies the defaults so that programs installed with HackBoxSetup will be used over the defaults.
