@@ -4,7 +4,7 @@ install: build
 	sudo gdebi --non-interactive hackbox-mimetype-defaults_UNSTABLE.deb
 uninstall:
 	sudo apt-get purge hackbox-mimetype-defaults
-build: 
+build:
 	sudo make build-deb;
 build-deb:
 	mkdir -p debian;
@@ -24,19 +24,17 @@ build-deb:
 	# copy over the assocation wizard
 	cp assocwizard.sh ./debian/usr/bin/assocwizard -v
 	# make it executable
-	chmod +x ./debian/usr/bin/assocwizard 
+	chmod +x ./debian/usr/bin/assocwizard
 	# copy over configs to be installed
-	cp launcherFiles/avplayOpen.desktop ./debian/usr/share/applications/ -v
+	cp launcherFiles/*.desktop ./debian/usr/share/applications/ -v
 	cp mimeapps.list ./debian/etc/skel/.local/share/applications/ -v
-	#cp defaults.list ./debian/usr/share/applications/ -v
-	cp defaults.list ./debian/opt/hackbox/media/defaults.list -v
 	# Create the md5sums file
 	find ./debian/ -type f -print0 | xargs -0 md5sum > ./debian/DEBIAN/md5sums
 	# cut filenames of extra junk
 	sed -i 's/\.\/debian\///g' ./debian/DEBIAN/md5sums
 	sed -i 's/\\n*DEBIAN*\\n//g' ./debian/DEBIAN/md5sums
 	sed -i 's/\\n*DEBIAN*//g' ./debian/DEBIAN/md5sums
-	# figure out the package size	
+	# figure out the package size
 	du -sx --exclude DEBIAN ./debian/ > Installed-Size.txt
 	# copy over package data
 	cp -rv debdata/. debian/DEBIAN/

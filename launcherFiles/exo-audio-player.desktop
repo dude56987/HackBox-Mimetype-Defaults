@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+NoDisplay=true
+Icon=audio-player
+Exec=vlc --audio-visual visualizer --effect-width 0 --effect-height 0 --effect-list spectrum --started-from-file %U
+Name=Audio Player
+Comment=Light and quick player for audio files

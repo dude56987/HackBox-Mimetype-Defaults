@@ -1,1 +1,4 @@
-cp -vf /opt/hackbox/media/defaults.list /usr/share/applications/
+# copy the mimeapps.list file to the system default mimeapps list
+cp -vf /etc/skel/.local/share/applications/mimeapps.list /etc/gnome/default.list
+# create link if it does not exist yet
+ln -vsf /etc/gnome/defaults.list /usr/share/applications/defaults.list
