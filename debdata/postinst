@@ -1,4 +1,9 @@
 # copy the mimeapps.list file to the system default mimeapps list
-cp -vf /etc/skel/.local/share/applications/mimeapps.list /etc/gnome/default.list
+if [ -f /etc/gnome/defaults.list ];then
+	cp -vf /etc/skel/.local/share/applications/mimeapps.list /etc/gnome/defaults.list;
+fi
+if [ -f /etc/xfce4/defaults.list ];then
+	cp -vf /etc/skel/.local/share/applications/mimeapps.list /etc/xfce4/defaults.list;
+fi
 # create link if it does not exist yet
 ln -vsf /etc/gnome/defaults.list /usr/share/applications/defaults.list
